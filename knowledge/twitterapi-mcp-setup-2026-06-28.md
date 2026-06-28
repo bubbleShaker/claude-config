@@ -1,48 +1,72 @@
-# twitterapi MCP server のセットアップ（API キーを git に置かない方法）
+# twitterapi MCP server のセットアップ（正しい登録場所とキー秘匿）
 
-Issue #21 で X(Twitter) ポスト取得用に `twitterapi` MCP server を登録した。
-その際の「API キーを git 管理ファイルに平文で入れない」仕組みのメモ。
+X(Twitter) のポスト取得用に公式 MCP server を登録する手順と、ハマった落とし穴のメモ。
+（経緯: #21 で settings.json に登録 → 読まれず失敗 → #26 で正しい場所に再登録）
 
-## 仕組み
+## 最重要の落とし穴: MCP は settings.json には書けない
 
-`home/.claude/settings.json` の `mcpServers.twitterapi.env` には、キー本体ではなく
-**環境変数参照** `${TWITTERAPI_API_KEY}` だけを書く。
+Claude Code が MCP server 定義を読む場所は **2つだけ**（公式 docs）:
 
-```jsonc
-"twitterapi": {
-  "command": "npx",
-  "args": ["-y", "twitterapi-mcp@1.0.0"], // バージョン pin（サプライチェーン対策・再現性）
-  "env": {
-    "TWITTERAPI_API_KEY": "${TWITTERAPI_API_KEY}" // 実キーはOS環境変数から注入
-  }
-}
-```
+| スコープ | 保存先 | 読まれる範囲 |
+|---|---|---|
+| user | `~/.claude.json`（トップレベル `mcpServers`） | 全プロジェクト |
+| local（既定） | `~/.claude.json`（プロジェクト別） | そのプロジェクトのみ |
+| project | リポジトリ直下の `.mcp.json` | そのプロジェクト（git 共有可） |
 
-Claude Code は MCP 設定の `env` 値で `${VAR}` を OS 環境変数から展開する。
-よって git に残るのは参照文字列だけで、キー実体はリポジトリに入らない。
+**`~/.claude/settings.json` の `mcpServers` キーは MCP 設定として読まれない。**
+ここに書いても `/mcp` にも `claude mcp list` にも出ず、接続されない（#21 の失敗原因）。
 
-## 別マシンで使うとき（必須の事前作業）
+> 補足: settings.json に前から残る `slack` 登録も同じ理由で死に設定（`claude mcp list`
+> に出ないことを確認済み）。その撤去・移設は #26 のスコープ外として別途扱う。
+
+## 採用パッケージ（公式）
+
+- `@kaitoinfra/twitterapi-io-mcp-server`（運営元 kaitoinfra 公開・"Official" 明記）
+- 環境変数: `TWITTERAPI_IO_API_KEY`
+- 個人公開の `twitterapi-mcp`(kinhunt) もあるが、サプライチェーン安全性で公式を採用。
+
+## 登録手順
 
 1. https://twitterapi.io/ でサインアップし API キーを取得（クレカ不要・無料クレジットあり）。
-2. **ユーザー環境変数**に永続設定する（PowerShell）:
+2. **OS ユーザー環境変数**にキーを永続設定（PowerShell）:
    ```powershell
    setx TWITTERAPI_API_KEY "<取得したキー>"
    ```
-   - `$env:` への代入はそのセッション限りで消えるので不可。`setx` で永続化する。
-   - キーをコマンド履歴に残したくなければ `sysdm.cpl` のGUIから手入力でもよい。
-3. **Claude Code を再起動**する。`setx` は既存プロセスに反映されないため、
-   再起動して初めて `${TWITTERAPI_API_KEY}` が展開される。
-4. `/mcp` で `twitterapi` が connected になり、`search_tweets` 等が使えることを確認。
+   - `$env:` 代入はセッション限りで消えるので不可。
+   - 設定後は Claude Code / シェルを再起動（`setx` は既存プロセスに反映されない）。
+3. user スコープで登録（**リポジトリルートから** `scripts/setup-mcp-twitterapi.ps1` を実行）:
+   ```powershell
+   & scripts/setup-mcp-twitterapi.ps1   # cwd がリポジトリルートである前提
+   ```
+   実体はこのコマンド:
+   ```powershell
+   claude mcp add twitterapi --scope user --transport stdio `
+     --env 'TWITTERAPI_IO_API_KEY=${TWITTERAPI_API_KEY}' `
+     -- npx -y '@kaitoinfra/twitterapi-io-mcp-server@0.1.2'
+   ```
+4. `claude mcp list` で `twitterapi ... ✔ Connected` を確認。
 
-## ハマりどころ
+## キーを平文で残さない仕組み
 
-- 環境変数が未設定だと展開結果が空文字になり、MCP が**静かに失敗**する（接続はするがキー不正）。
-- 「再起動した」つもりでも親ランチャーが古い環境を保持していると、新プロセスに環境変数が
-  乗らないことがある。`$env:TWITTERAPI_API_KEY.Length` で 0 でないことを確認すると確実。
+- `~/.claude.json` の env 値は `"TWITTERAPI_IO_API_KEY": "${TWITTERAPI_API_KEY}"` という
+  **参照のまま**保存され、Claude Code が起動時に OS 環境変数から展開する。
+- よって平文キーはどのファイルにも残らず、OS のユーザー環境変数にのみ存在する。
+- `~/.claude.json` 自体も git 管理外（claude-config の追跡対象は home/.claude/ のみ）。
+- 変数名のマッピング: 公式 server は `TWITTERAPI_IO_API_KEY` を要求するが、既存の
+  `TWITTERAPI_API_KEY` を `${...}` で流用しているので env の再設定は不要。
 
 ## 動作確認済み（2026-06-28）
 
-`search_tweets`（query: `from:elonmusk`）で実ツイートが id/text/likeCount 付きで返ることを確認。
-提供ツール: get_user_by_username / get_user_by_id / get_user_tweets / search_tweets /
-get_tweet_by_id / get_tweet_replies / get_user_followers / get_user_following /
-search_users / login_user / create_tweet。
+- `claude mcp list` → `twitterapi ... ✔ Connected`
+- `search_tweets`（query: `from:elonmusk`, queryType: `Latest`）で実ツイートが
+  id/text/likeCount 付きで返却。
+- 提供ツール（12個）: search_tweets / get_user_info / get_user_about /
+  get_user_followers / get_user_followings / get_user_last_tweets / get_user_mentions /
+  get_tweets_by_ids / get_tweet_replies / get_tweet_quotes / get_tweet_retweeters / get_trends。
+  注: `search_tweets` は `queryType`（`Latest` | `Top`）が必須。
+
+## ハマりどころ
+
+- 環境変数が未設定だと展開結果が空になり、接続はしてもツール呼び出しでキー不正になる。
+- 「再起動した」つもりでも親ランチャーが古い環境を保持していると新プロセスに env が乗らない。
+  `$env:TWITTERAPI_API_KEY.Length` が 0 でないことを確認すると確実。
