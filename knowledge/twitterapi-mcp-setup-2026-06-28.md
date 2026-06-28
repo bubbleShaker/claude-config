@@ -3,6 +3,9 @@
 X(Twitter) のポスト取得用に公式 MCP server を登録する手順と、ハマった落とし穴のメモ。
 （経緯: #21 で settings.json に登録 → 読まれず失敗 → #26 で正しい場所に再登録）
 
+> 凍結リスクの脅威モデルと料金の概算は
+> [twitterapi-mcp-risk-and-cost-2026-06-28.md](./twitterapi-mcp-risk-and-cost-2026-06-28.md) を参照。
+
 ## 最重要の落とし穴: MCP は settings.json には書けない
 
 Claude Code が MCP server 定義を読む場所は **2つだけ**（公式 docs）:
