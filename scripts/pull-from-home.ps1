@@ -8,12 +8,12 @@ $homeClaude = Join-Path $HOME '.claude'
 
 $files = @(
     'settings.json',
-    'CLAUDE.md',
-    'agents\reviewer.md'
+    'CLAUDE.md'
 )
 
 # ディレクトリ単位で再帰的に取り込む対象（明示列挙）。
 $dirs = @(
+    'agents',
     'skills'
 )
 
