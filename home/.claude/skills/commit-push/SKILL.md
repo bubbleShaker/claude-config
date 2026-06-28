@@ -1,8 +1,6 @@
 ---
 name: commit-push
 description: 現在の変更をコミット・プッシュする。ユーザーが「コミットして」「プッシュして」「commit-push」と言ったときに使う。
-version: 1.3.0
-user-invocable: true
 disable-model-invocation: true
 ---
 

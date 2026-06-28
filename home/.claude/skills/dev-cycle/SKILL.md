@@ -1,8 +1,6 @@
 ---
 name: dev-cycle
 description: ~/git 配下プロジェクトの開発を「Issue→実装→レビュー→PR→マージ」のオーケストレーションサイクルで進める。ユーザーが「dev-cycleで進めて」「サイクルで進めて」「Issueから実装して」と言ったときに使う。
-version: 1.0.0
-user-invocable: true
 disable-model-invocation: true
 ---
 
