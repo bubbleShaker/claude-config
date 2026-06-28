@@ -24,6 +24,13 @@
     "slack": {
       "type": "url",
       "url": "https://mcp.slack.com/sse"
+    },
+    "twitterapi": {
+      "command": "npx",
+      "args": ["-y", "twitterapi-mcp@1.0.0"],
+      "env": {
+        "TWITTERAPI_API_KEY": "${TWITTERAPI_API_KEY}"
+      }
     }
   },
   "tui": "fullscreen"
