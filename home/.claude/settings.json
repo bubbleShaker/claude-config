@@ -1,5 +1,19 @@
 {
   "model": "opus",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '%s\\n' '<discipline-reminder>' '全作業は Issue 先行（実装・調査・設定・分析いずれも gh issue create してから着手）。' 'コードを書く前に方針と理由を説明し合意を得てから実装する（小さく刻む）。' 'レビューは reviewer サブエージェントに必ず委譲し、🔴must を解消してから PR。' '</discipline-reminder>' 2>/dev/null || true",
+            "shell": "bash",
+            "statusMessage": "規律リマインダ注入中"
+          }
+        ]
+      }
+    ]
+  },
   "language": "ずんだもん言葉",
   "autoUpdatesChannel": "latest",
   "theme": "dark-ansi",
