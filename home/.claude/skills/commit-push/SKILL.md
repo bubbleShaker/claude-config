@@ -1,7 +1,7 @@
 ---
 name: commit-push
 description: 現在の変更をコミット・プッシュする。ユーザーが「コミットして」「プッシュして」「commit-push」と言ったときに使う。
-version: 1.2.0
+version: 1.3.0
 user-invocable: true
 ---
 
@@ -45,14 +45,17 @@ powershell -Command "gh repo create <REPO_NAME> --private --source <REPO_PATH> -
 ### Step 4: ステージングしてコミット
 
 変更ファイルを個別に `git add` してからコミットするのだ。
-PowerShell の `-m` では改行が難しいので、1行メッセージ ＋ Co-Author を末尾につけるのだ：
+PowerShell の `-m` では改行が難しいので、1行メッセージ ＋ フッターを末尾につけるのだ：
 
 ```
 powershell -Command "cd <REPO_PATH>; git add <file1> <file2>; git commit -m 'summary message
 
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>'"
+Co-Authored-By: <現在のモデル名> <noreply@anthropic.com>   # 例: Claude Opus 4.8
+Claude-Session: <現在のセッションURL>'"
 ```
 
+- **Co-Author 名はモデル名をハードコードせず、その時点の現行モデル名を使う**（例: `Claude Opus 4.8`）。古い名前で固定しないこと。
+- `Claude-Session:` 行はそのセッションの URL を入れる（harness が git 規約として注入する値を使う）。不明なら省略可。
 - 機密ファイル（`.pem`, `.env` 等）は **絶対に add しない**
 - 不要ファイルは先に `.gitignore` に追加してからコミットする
 
