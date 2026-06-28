@@ -3,6 +3,7 @@ name: deploy-lambda
 description: ASMRパイプラインを AWS Lambda にデプロイする。ユーザーが「Lambdaにデプロイして」「deploy-lambda」と言ったときに使う。
 version: 1.0.0
 user-invocable: true
+disable-model-invocation: true
 ---
 
 # Skill: Lambda デプロイ

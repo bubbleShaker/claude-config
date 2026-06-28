@@ -3,6 +3,7 @@ name: collect-shorts
 description: YouTube Shorts の楽曲・ボカロ・バイラルサウンドを収集する。ユーザーが「Shortsを収集して」「collect-shorts」「ボカロ収集して」と言ったときに使う。
 version: 1.0.0
 user-invocable: true
+disable-model-invocation: true
 ---
 
 # Skill: YouTube Shorts 楽曲収集
