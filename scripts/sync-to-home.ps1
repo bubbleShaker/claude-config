@@ -13,6 +13,11 @@ $files = @(
     'agents\reviewer.md'
 )
 
+# ディレクトリ単位で再帰コピーする対象（明示列挙）。skills は配下を丸ごと反映する。
+$dirs = @(
+    'skills'
+)
+
 foreach ($rel in $files) {
     $src = Join-Path $repoClaude $rel
     if (-not (Test-Path $src)) { continue }
@@ -21,5 +26,22 @@ foreach ($rel in $files) {
     if (-not (Test-Path $dstDir)) { New-Item -ItemType Directory -Force -Path $dstDir | Out-Null }
     Copy-Item -Path $src -Destination $dst -Force
     Write-Host "applied: $rel"
+}
+
+foreach ($rel in $dirs) {
+    # $dirs はハードコードのみ（ユーザー入力・ワイルドカード由来でない）。
+    # よって削除対象は常に ~/.claude/<明示名> に限定され、home の他ファイルは巻き込まない。
+    $src = Join-Path $repoClaude $rel
+    if (-not (Test-Path $src)) { continue }
+    $dst = Join-Path $homeClaude $rel
+    # repo を source of truth として丸ごと置き換える（home 側で消したスキルは復活しない）。
+    # 非アトミックな「削除→コピー」を避けるため、まず temp へコピーし、成功後に入れ替える。
+    # コピーが途中失敗しても既存の $dst は無傷で残る。
+    $tmp = "$dst.tmp-sync"
+    if (Test-Path $tmp) { Remove-Item -Path $tmp -Recurse -Force }
+    Copy-Item -Path $src -Destination $tmp -Recurse -Force
+    if (Test-Path $dst) { Remove-Item -Path $dst -Recurse -Force }
+    Move-Item -Path $tmp -Destination $dst
+    Write-Host "applied: $rel\ (recursive)"
 }
 Write-Host 'done.'

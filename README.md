@@ -13,12 +13,17 @@
 | `home/.claude/settings.json` | モデル/テーマ/hooks/MCP などの設定 |
 | `home/.claude/CLAUDE.md` | global ガイドライン（Vibe Coding + 運用方針） |
 | `home/.claude/agents/` | サブエージェント定義（例: `reviewer.md`） |
+| `home/.claude/skills/` | ユーザースキル定義（`SKILL.md` 一式）。ディレクトリ単位で再帰同期する |
 
 > project 側の `~/git/CLAUDE.md`（オーケストレーション方針）は別リポジトリ
 > [`orchestration-guidelines`](https://github.com/bubbleShaker/orchestration-guidelines) で管理しているのでここには含めない。
 
 機密ファイル（`.credentials.json` / `history.jsonl` / `sessions/` 等）は
 そもそも `home/.claude/` に置かず、`.gitignore` でも多層防御で除外している。
+
+> ⚠️ このリポジトリは **public**。`skills/` には実コマンドが入るため、
+> 取り込み・編集時に実アカウントID・絶対パス・ユーザー名などの PII を
+> プレースホルダー（`<WIN_USER>` 等）へ置換してからコミットすること。
 
 ## 同期
 
