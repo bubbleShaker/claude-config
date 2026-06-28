@@ -12,7 +12,7 @@
 |---|---|
 | `home/.claude/settings.json` | モデル/テーマ/hooks/MCP などの設定 |
 | `home/.claude/CLAUDE.md` | global ガイドライン（Vibe Coding + 運用方針） |
-| `home/.claude/agents/` | サブエージェント定義（例: `reviewer.md`） |
+| `home/.claude/agents/` | サブエージェント定義（`reviewer` / `researcher` 等）。ディレクトリ単位で再帰同期する |
 | `home/.claude/skills/` | ユーザースキル定義（`SKILL.md` 一式）。ディレクトリ単位で再帰同期する |
 
 > project 側の `~/git/CLAUDE.md`（オーケストレーション方針）は別リポジトリ
@@ -21,9 +21,10 @@
 機密ファイル（`.credentials.json` / `history.jsonl` / `sessions/` 等）は
 そもそも `home/.claude/` に置かず、`.gitignore` でも多層防御で除外している。
 
-> ⚠️ このリポジトリは **public**。`skills/` には実コマンドが入るため、
-> 取り込み・編集時に実アカウントID・絶対パス・ユーザー名などの PII を
-> プレースホルダー（`<WIN_USER>` 等）へ置換してからコミットすること。
+> ⚠️ このリポジトリは **public**。`skills/` `agents/` には実コマンドやプロンプトが入り、
+> 再帰同期で配下が丸ごと取り込まれる。`pull-from-home` で私的・実験的なスキル/エージェントが
+> 混入しうるため、取り込み後は必ず `git diff` で公開可否を確認し、
+> 実アカウントID・絶対パス・ユーザー名などの PII はプレースホルダー（`<WIN_USER>` 等）へ置換してからコミットすること。
 
 ## 同期
 

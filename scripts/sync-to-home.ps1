@@ -9,12 +9,12 @@ $homeClaude = Join-Path $HOME '.claude'
 # コピー対象（相対パス）を明示列挙する。ワイルドカードで巻き込まない。
 $files = @(
     'settings.json',
-    'CLAUDE.md',
-    'agents\reviewer.md'
+    'CLAUDE.md'
 )
 
-# ディレクトリ単位で再帰コピーする対象（明示列挙）。skills は配下を丸ごと反映する。
+# ディレクトリ単位で再帰コピーする対象（明示列挙）。配下を丸ごと反映する。
 $dirs = @(
+    'agents',
     'skills'
 )
 
