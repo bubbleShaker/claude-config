@@ -192,7 +192,7 @@ agent: Explore
 | `permissionMode` | なし | 未設定 | `plan` を検討（read-only 強制） |
 | `memory` | なし | 未設定 | `project` を追加検討（レビューパターンの蓄積） |
 | `color` | なし | 任意だが便利 | 任意 |
-| `version` | あり | **非公式フィールド** | 削除推奨 |
+| `version` | **なし**（誤記訂正） | OK | - |
 | プロンプトインジェクション対策 | 本文に明記なし | - | 追記推奨（researcher.md には記載済み） |
 
 #### researcher.md
@@ -270,7 +270,7 @@ disable-model-invocation: true
 
 1. **reviewer.md に `permissionMode: plan` を追加** — 読み取り専用を強制
 2. **reviewer.md と researcher.md に `memory: project` を追加** — レビューパターン・調査知見の蓄積
-3. **全エージェントから `version` フィールドを削除** — 非公式フィールドのクリーンアップ
+（注: エージェントには元々 `version` フィールドは無いため削除対象外。当初の誤記を訂正済み。）
 
 ### 優先度 LOW（クリーンアップ・最適化）
 

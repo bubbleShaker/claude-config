@@ -1,8 +1,6 @@
 ---
 name: upload-video
 description: 生成済みのASMR動画をYouTubeにアップロードする。ユーザーが「アップロードして」「upload-video」「YouTubeに上げて」と言ったときに使う。
-version: 1.0.0
-user-invocable: true
 disable-model-invocation: true
 ---
 

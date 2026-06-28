@@ -1,8 +1,6 @@
 ---
 name: csharp-best-practices
 description: This skill should be used when the user asks to "write C# code", "review C# code", "follow C# coding conventions", "apply C# best practices", "C#のコーディング規約", "C#のベストプラクティス", or when writing, reviewing, or refactoring any C# source file.
-version: 1.0.0
-user-invocable: true
 ---
 
 # C# コーディング規約（.NET 公式ガイドライン）
