@@ -3,6 +3,7 @@ name: repo-publish
 description: プライベートリポジトリを安全にpublicにする。機密情報のスキャン・履歴書き換え・public化を一連で行う。ユーザーが「publicにして」「repo-publish」「リポジトリを公開して」と言ったときに使う。
 version: 1.0.0
 user-invocable: true
+disable-model-invocation: true
 ---
 
 # Skill: リポジトリ安全公開

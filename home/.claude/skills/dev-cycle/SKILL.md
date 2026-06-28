@@ -3,6 +3,7 @@ name: dev-cycle
 description: ~/git 配下プロジェクトの開発を「Issue→実装→レビュー→PR→マージ」のオーケストレーションサイクルで進める。ユーザーが「dev-cycleで進めて」「サイクルで進めて」「Issueから実装して」と言ったときに使う。
 version: 1.0.0
 user-invocable: true
+disable-model-invocation: true
 ---
 
 # Skill: 開発オーケストレーションサイクル
@@ -49,7 +50,8 @@ git checkout -b feat/<n>-xxx
 ## Step 5: コミット & プッシュ
 
 reviewer の 🔴 must を解消したら、コミットしてリモートへ push するのだ。
-**具体的な手順（PowerShell での git 実行・コミットメッセージ規約・機密除外）は commit-push スキルに委譲する**。
+手順は commit-push スキルに揃えるのだ。**ただし commit-push は手動起動専用（`disable-model-invocation: true`）で自動では呼ばれない**。
+このサイクル中は `/commit-push` を明示的に実行するか、Claude が直接 commit する場合も commit-push と同じ規約（PowerShell での git 実行・コミットメッセージ規約・機密ファイル除外）を守ること。
 PR を作る前に必ず push を済ませること（push 前に `gh pr create` を走らせない）。
 
 ## Step 6: PR を出す

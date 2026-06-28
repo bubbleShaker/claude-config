@@ -3,6 +3,7 @@ name: generate-video
 description: ASMRパイプラインで動画を dry-run モードで生成する。ユーザーが「動画を生成して」「generate-video」と言ったときに使う。
 version: 1.0.0
 user-invocable: true
+disable-model-invocation: true
 ---
 
 # Skill: ASMR動画生成 (dry-run)
