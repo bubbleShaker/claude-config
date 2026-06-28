@@ -1,7 +1,7 @@
 ---
 name: hono-aws-lambda
 description: This skill should be used when the user works with Hono framework on AWS Lambda + API Gateway, builds or reviews Hono API endpoints, deploys Hono to Lambda, or asks about "Hono Lambda", "hono/aws-lambda", or Hono TypeScript API patterns.
-version: 2.0.0
+version: 2.0.1
 user-invocable: true
 ---
 
@@ -18,9 +18,8 @@ TypeScript + Hono + AWS Lambda + API Gateway HTTP API (V2) のベストプラク
 my-api/
 ├── src/
 │   └── index.ts        # Honoアプリ + Lambdaハンドラー
-├── package.json
-├── tsconfig.json
-└── build.mjs           # esbuildバンドルスクリプト（オプション）
+├── package.json        # build スクリプト(esbuild)を含む
+└── tsconfig.json
 ```
 
 ## 基本実装パターン
