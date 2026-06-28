@@ -1,0 +1,30 @@
+{
+  "model": "opus",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{ echo \"<claude-md-reminder>\"; cat \"/c/Users/moai0/.claude/CLAUDE.md\"; echo; cat \"/c/Users/moai0/git/CLAUDE.md\"; echo \"</claude-md-reminder>\"; } 2>/dev/null || true",
+            "shell": "bash",
+            "statusMessage": "CLAUDE.md を再注入中"
+          }
+        ]
+      }
+    ]
+  },
+  "language": "ずんだもん言葉",
+  "autoUpdatesChannel": "latest",
+  "theme": "dark-ansi",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true,
+  "voiceEnabled": true,
+  "mcpServers": {
+    "slack": {
+      "type": "url",
+      "url": "https://mcp.slack.com/sse"
+    }
+  },
+  "tui": "fullscreen"
+}
